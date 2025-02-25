@@ -21,6 +21,8 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
   constructor() {
     super();
     this.count = 0;
+    this.max=25;
+    this.min=-25;
     this.title = "";
     this.t = this.t || {};
     this.t = {
@@ -41,6 +43,8 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
     return {
       ...super.properties,
       count: { type: Number, reflect: true },
+      max: { type: Number, reflect: true },
+      min: { type: Number, reflect: true },
     };
   }
 
@@ -60,11 +64,17 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
       :host([count="21"]) {
         color: var(--ddd-theme-default-creekTeal);
       }
-      :host([count="50"]) {
+      :host([count="25"]) {
         color: var(--ddd-theme-default-pughBlue);
       }
-      :host([count="-50"]) {
+      :host([count="-25"]) {
         color: var(--ddd-theme-default-keystoneYellow);
+      }
+      :host([count="-18"]) {
+        color: var(--ddd-theme-default-roarGolden);
+      }
+      :host([count="-21"]) {
+        color: var(--ddd-theme-default-creekTeal);
       }
       .wrapper {
         margin: var(--ddd-spacing-2);
@@ -115,10 +125,9 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
       <confetti-container id="confetti" class="wrapper">
         <div class="counter">${this.count}</div>
         <div class="buttons">
-          <button @click="${this.decrease}">-1</button>
-          <button @click="${this.increase}">+1</button>
-          <button @click="${this.max}" ?disabled="${this.max === this.counter}">max</button>
-          <button @click="${this.min}" ?disabled="${this.min === this.counter}">min</button>
+          <button @click="${this.decrease}" ?disabled="${this.min  === this.count}">-1</button>
+          <button @click="${this.increase}" ?disabled="${this.max === this.count}">+1</button>
+          <button @click="${this.reset}">reset</button>
         </div>
       </confetti-container>
    `;
@@ -133,12 +142,7 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
   reset() {
     this.count = 0;
   }
-  min() {
-    this.count = -50;
-  }
-  max() {
-    this.count = 50;
-  }
+  
 
   /**
    * haxProperties integration via file reference
